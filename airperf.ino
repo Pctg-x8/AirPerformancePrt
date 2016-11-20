@@ -13,9 +13,9 @@ static bool interrupted = false;
 
 void setup()
 {
-  // MIDI.begin();
-  Serial.begin(9600);
-  Serial.println("---Gesture Test---");
+  MIDI.begin();
+  // Serial.begin(9600);
+  // Serial.println("---Gesture Test---");
   pinMode(GestureIntPin, INPUT);
   attachInterrupt(0, gestureInterrupt, FALLING);
   if(!gesture.init()) Serial.println("Something went wrong during APDS-9960 init");
@@ -33,13 +33,13 @@ void loop()
     {
       switch(gesture.readGesture())
       {
-        case DIR_UP: Serial.println("UP"); break;
-        case DIR_DOWN: Serial.println("DOWN"); break;
-        case DIR_LEFT: Serial.println("LEFT"); break;
-        case DIR_RIGHT: Serial.println("RIGHT"); break;
-        case DIR_NEAR: Serial.println("NEAR"); break;
-        case DIR_FAR: Serial.println("FAR"); break;
-        default: Serial.println("NONE");
+        case DIR_UP: handleUpGesture(); break;
+        case DIR_DOWN: handleDownGesture(); break;
+        case DIR_LEFT: handleLeftGesture(); break;
+        case DIR_RIGHT: handleRightGesture(); break;
+        case DIR_NEAR: handleNearGesture(); break;
+        case DIR_FAR: handleFarGesture(); break;
+        default: /*Serial.println("NONE");*/ ;// Nothing to do
       }
     }
     interrupted = false;
@@ -55,4 +55,31 @@ void loop()
 }
 
 void gestureInterrupt() { interrupted = true; }
+
+/* Gesture Handlers */
+
+void handleUpGesture()
+{
+  MIDI.sendNoteOn(1, 100, 1);
+}
+void handleDownGesture()
+{
+  MIDI.sendNoteOn(2, 100, 1);
+}
+void handleLeftGesture()
+{
+  MIDI.sendNoteOn(3, 100, 1);
+}
+void handleRightGesture()
+{
+  MIDI.sendNoteOn(4, 100, 1);
+}
+void handleNearGesture()
+{
+  MIDI.sendNoteOn(5, 100, 1);
+}
+void handleFarGesture()
+{
+  MIDI.sendNoteOn(6, 100, 1);
+}
 
